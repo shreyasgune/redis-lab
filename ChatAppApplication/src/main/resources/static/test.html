@@ -11,14 +11,23 @@
 <div id="chat"></div>
 
 <script>
+    fetch('/chat/history')
+      .then(response => response.json())
+      .then(data => {
+        const chatBox = document.getElementById('chat');
+        data.forEach(msg => {
+          chatBox.innerHTML += `<p>${msg}</p>`;
+        });
+      });
+
     const socket = new SockJS('/ws');
     const stomp = Stomp.over(socket);
 
     stomp.connect({}, () => {
-        stomp.subscribe('/topic/messages', (message) => {
-            const chatBox = document.getElementById('chat');
-            chatBox.innerHTML += `<p>${message.body}</p>`;
-        });
+      stomp.subscribe('/topic/messages', (message) => {
+        const chatBox = document.getElementById('chat');
+        chatBox.innerHTML += `<p>${message.body}</p>`;
+      });
     });
 </script>
 </body>
