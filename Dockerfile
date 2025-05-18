@@ -1,6 +1,8 @@
 # Stage 1: Build the application
 # Use a Maven image with JDK 17
-FROM maven:3.9.6-eclipse-temurin-17-jammy AS build
+FROM openjdk:21-jdk-slim  AS build
+
+RUN apt-get update && apt-get install -y maven
 
 # Set the working directory in the container
 WORKDIR /app
@@ -20,7 +22,9 @@ RUN mvn package -DskipTests -B
 
 # Stage 2: Create the runtime image
 # Use a JRE image for a smaller footprint
-FROM eclipse-temurin:17-jre-jammy
+FROM alpine:latest
+
+ENV PATH=$PATH:/opt/jdk/bin
 
 WORKDIR /app
 
