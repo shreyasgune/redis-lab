@@ -22,7 +22,7 @@ RUN mvn package -DskipTests -B
 
 # Stage 2: Create the runtime image
 # Use a JRE image for a smaller footprint
-FROM alpine:latest
+FROM openjdk:17-jdk-slim
 
 ENV PATH=$PATH:/opt/jdk/bin
 

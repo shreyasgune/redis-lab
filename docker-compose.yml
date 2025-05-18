@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: chat_redis
+    ports:
+      # Exposes Redis on port 6379 to the host machine and other services
+      - "6379:6379"
+    # To set a password for Redis, uncomment the following line
+    # and ensure SPRING_REDIS_PASSWORD in the 'app' service is also set.
+    # command: redis-server --requirepass yourSuperSecretPassword
+
+  app:
+    image: sgune/springboot_chat:latest
+    container_name: chat_app
+    ports:
+      # Exposes the Spring Boot application on port 8080
+      - "8080:8080"
+    depends_on:
+      - redis # Ensures Redis is started before the application
+    environment:
+      SPRING_REDIS_HOST: redis # The application will connect to Redis using the service name 'redis'
+      SPRING_REDIS_PORT: 6379
+      # If your Redis instance requires a password (see 'redis' service above),
+      # uncomment and set the password here.
+      # SPRING_REDIS_PASSWORD: yourSuperSecretPassword
+
+# To run this, save it as docker-compose.yml in the same directory as your README.md,
+# then execute: docker-compose up
