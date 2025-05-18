@@ -12,7 +12,7 @@ services:
     # command: redis-server --requirepass yourSuperSecretPassword
 
   app:
-    image: sgune/springboot_chat:latest
+    image: sgune/springboot_chat:test
     container_name: chat_app
     ports:
       # Exposes the Spring Boot application on port 8080
