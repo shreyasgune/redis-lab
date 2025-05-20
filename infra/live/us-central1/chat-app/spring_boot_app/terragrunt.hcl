@@ -19,12 +19,12 @@ inputs = {
   
     # Set environment variables for your Spring Boot application
     env_vars = {
-      SPRING_PROFILES_ACTIVE = "dev"
-      SPRING_REDIS_HOST = "10.237.0.12"
+    #   SPRING_PROFILES_ACTIVE = "dev"
+    #   SPRING_REDIS_HOST = "10.237.0.12"
+      SPRING_REDIS_HOST = "localhost" # to connect to sidecar redis for now
       SPRING_REDIS_PORT = "6379"
-      SPRING_REDIS_PASSWORD = get_env("SPRING_REDIS_PASSWORD")
+    #   SPRING_REDIS_PASSWORD = get_env("SPRING_REDIS_PASSWORD")
     }
-
     # Adjust scaling and resources as needed
     min_instance_count = 0     # Scale to zero to save costs when idle
     max_instance_count = 1

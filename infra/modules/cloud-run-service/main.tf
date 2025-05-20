@@ -2,6 +2,7 @@ resource "google_cloud_run_v2_service" "spring_boot_app" {
   project  = var.project_id
   location = var.region
   name     = var.service_name
+  ingress = "INGRESS_TRAFFIC_ALL"
 
   template {
     scaling {
@@ -29,6 +30,30 @@ resource "google_cloud_run_v2_service" "spring_boot_app" {
           value = env.value
         }
       }
+      depends_on = ["redis-service"]
+    }
+
+    containers {
+        image = "redis:alpine"
+        name = "redis-service"
+        # ports {
+        #   container_port = 6379
+        # }
+        startup_probe {
+          initial_delay_seconds = 0
+          timeout_seconds = 1
+          period_seconds = 3
+          failure_threshold = 1
+          tcp_socket {
+            port = 6379
+          }
+        }
+        resources {
+          limits = {
+            cpu    = "0.5" # 500m CPU
+            memory = "512Mi" # 512 MiB RAM
+          }
+        }
     }
   }
 
@@ -41,16 +66,16 @@ resource "google_cloud_run_v2_service" "spring_boot_app" {
   labels = var.labels
 }
 
-resource "google_vpc_access_connector" "connector" {
-  name          = "run-vpc"
-  subnet {
-    name = var.subnet_name
-  }
-  machine_type = var.machine_type
-  min_instances = 2
-  max_instances = 3
-  region        = var.region
-}
+# resource "google_vpc_access_connector" "connector" {
+#   name          = "run-vpc"
+#   subnet {
+#     name = var.subnet_name
+#   }
+#   machine_type = var.machine_type
+#   min_instances = 2
+#   max_instances = 3
+#   region        = var.region
+# }
 
 # IAM policy to allow unauthenticated (public) access
 resource "google_cloud_run_service_iam_member" "invoker" {
