@@ -68,3 +68,16 @@ curl -X POST http://localhost:8080/chat/send \
 -d "Hello from WebSocket"
 
 ### 6. The message will appear live in the browser.
+
+
+## LOCAL SETUP
+`sudo docker buildx build --rm -t chat-app:0.0.1 .`
+`sudo docker run --rm -p 8080:8080 -p 6379:6379 -e SPRING_REDIS_PASSWORD=$SPRING_REDIS_PASSWORD chat-app:0.0.1 bash`
+
+or 
+
+```
+
+docker compose up --build
+
+```
