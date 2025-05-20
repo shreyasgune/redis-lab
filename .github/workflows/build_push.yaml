@@ -1,10 +1,8 @@
 name: Docker Build and Push
 
 on:
-  push:
-    branches:
-      - main
-      - containerize
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
 
 permissions:
   contents: read
@@ -65,8 +63,8 @@ jobs:
 
       - name: Pull, Tag and Push latest
         env:
-          IMAGE_NAME: ${{ needs.build-and-push-image.outputs.image_name }}
-          SHA_TAG: ${{ needs.build-and-push-image.outputs.sha_tag }}
+          IMAGE_NAME: docker.io/sgune/chat-app
+          SHA_TAG: latest
         run: |
           if [ -z "$IMAGE_NAME" ] || [ -z "$SHA_TAG" ]; then
             echo "Error: Image name or SHA tag not provided from the previous job."

@@ -11,12 +11,12 @@ services:
     # command: redis-server --requirepass yourSuperSecretPassword
 
   app:
-    image: sgune/springboot_chat
+    image: docker.io/sgune/chat-app:test
     container_name: chat_app
     pull_policy: always
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     ports:
       # Exposes the Spring Boot application on port 8080
       - "8080:8080"
